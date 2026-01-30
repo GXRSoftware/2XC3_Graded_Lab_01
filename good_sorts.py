@@ -164,35 +164,54 @@ max_value = 2**30
 lists = [create_random_list(_, max_value) for _ in lengths]
 
 n = len(lengths)
-total1, total2, total3 = 0, 0, 0
 data1, data2, data3 = [], [], []
-cmp1, cmp2, cmp3 = [], [], []
 value = random.randint(0, max_value)
 
+runs = 10
+
 for _ in range(n):
-    print(_)
-    L = lists[_]
-    L1 = [*L]
-    L2 = [*L]
-    L3 = [*L]
+    total1, total2, total3 = 0, 0, 0
+    trial1, trial2, trial3 = [],[],[]
+    
+    for i in range(runs):
+        print(_)
+        L = lists[_]
+        L1 = [*L]
+        L2 = [*L]
+        L3 = [*L]
 
-    start = timeit.default_timer()
-    quicksort(L1)
-    elapsed = timeit.default_timer() - start
-    total1 += elapsed
-    data1.append(elapsed)
+        start = timeit.default_timer()
+        quicksort(L1)
+        elapsed = timeit.default_timer() - start
+        total1 += elapsed
+        trial1.append(elapsed)
 
-    start = timeit.default_timer()
-    mergesort(L2)
-    elapsed = timeit.default_timer() - start
-    total2 += elapsed
-    data2.append(elapsed)
+        start = timeit.default_timer()
+        mergesort(L2)
+        elapsed = timeit.default_timer() - start
+        total2 += elapsed
+        trial2.append(elapsed)
 
-    start = timeit.default_timer()
-    heapsort(L3)
-    elapsed = timeit.default_timer() - start
-    total3 += elapsed
-    data3.append(elapsed)
+        start = timeit.default_timer()
+        heapsort(L3)
+        elapsed = timeit.default_timer() - start
+        total3 += elapsed
+        trial3.append(elapsed)
+    
+    data1.append(sum(trial1) / runs)
+    data2.append(sum(trial2) / runs)
+    data3.append(sum(trial3) / runs)
+
+
+for i in range(n):
+    print(f"Run Size: {lengths[i]}:")
+    print(f"  QuickSort: {data1[i]}")
+    print(f"  MergeSort: {data2[i]}")
+    print(f"  HeapSort: {data3[i]}")
+    print(f"Performance Comparison: ")
+    print(f"  QuickSort vs MergeSort : {round((data2[i] / data1[i]),2)}x")
+    print(f"  QuickSort vs HeapSort : {round((data3[i] / data1[i]),2)}x")
+
 
 plt.plot(lengths, data1, color='red', label='quick_sort')
 plt.plot(lengths, data2, color='blue', label='merge_sort')
