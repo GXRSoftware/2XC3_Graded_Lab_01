@@ -304,7 +304,7 @@ def graph(*callbacks, filePath, title, colors):
     plt.savefig(filePath)
 
 # mergesort and bottom_up_merge sort comparisons
-graph(mergesort, bottom_up_mergesort, filePath="experiment7.png",
+graph(mergesort, bottom_up_mergesort, filePath="./Graphs/experiment7.png",
       title = 'Runtime Comparison of top down and bottom up merge sort', 
       colors = ("r", "b") 
 )
