@@ -75,6 +75,47 @@ def merge(left, right):
                 j += 1
     return L
 
+def bottom_up_mergesort_merge(arr, low1, high1, low2, high2): #LOOK HERE
+    i = low1
+    j = low2
+
+    sorted = []
+
+    while i <= high1 and j <= high2:
+        if arr[i] <= arr[j]:
+            sorted.append(arr[i])
+            i += 1
+        else:
+            sorted.append(arr[j])
+            j += 1
+
+    while i <= high1:
+        sorted.append(arr[i])
+        i += 1
+
+    while j <= high2:
+        sorted.append(arr[j])
+        j += 1
+
+    k = low1
+    for i in range(len(sorted)):
+        arr[k] = sorted[i]
+        k += 1
+
+
+def bottom_up_mergesort(arr): # LOOK HERE
+    size = 1
+    n = len(arr)
+
+    while size < n:
+        low1 = 0
+        while low1 < n:
+            mid = min(low1 + size - 1, n - 1)
+            high2 = min(low1 + 2 * size - 1, n - 1)
+            bottom_up_mergesort_merge(arr, low1, mid, mid + 1, high2)
+            low1 += size * 2
+        size *= 2
+
 # *************************************
 
 # ************* Heap Sort *************
