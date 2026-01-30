@@ -16,6 +16,7 @@ import timeit
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+from bad_sorts import insertion_sort2  # imported for experiment 8
 
 # ************ Quick Sort ************
 def quicksort(L):
@@ -193,119 +194,136 @@ class Heap:
             whitespace = whitespace // 2
         return s
 
-# *************************************
-    
-# Experiment 3 
-    
-def create_random_list(length, max_value):
-    return [random.randint(0, max_value) for _ in range(length)]
+if __name__ == "__main__":
+    # *************************************
+        
+    # Experiment 3 
+        
+    def create_random_list(length, max_value):
+        return [random.randint(0, max_value) for _ in range(length)]
 
-lengths = [2**x for x in range(13)]
-max_value = 2**30
-lists = [create_random_list(_, max_value) for _ in lengths]
+    lengths = [2**x for x in range(13)]
+    max_value = 2**30
+    lists = [create_random_list(_, max_value) for _ in lengths]
 
-n = len(lengths)
-data1, data2, data3 = [], [], []
-value = random.randint(0, max_value)
+    n = len(lengths)
+    data1, data2, data3 = [], [], []
+    value = random.randint(0, max_value)
 
-runs = 10
+    runs = 10
 
-for _ in range(n):
-    total1, total2, total3 = 0, 0, 0
-    trial1, trial2, trial3 = [],[],[]
-    
-    for i in range(runs):
-        print(_)
-        L = lists[_]
-        L1 = [*L]
-        L2 = [*L]
-        L3 = [*L]
+    for _ in range(n):
+        total1, total2, total3 = 0, 0, 0
+        trial1, trial2, trial3 = [],[],[]
+        
+        for i in range(runs):
+            print(_)
+            L = lists[_]
+            L1 = [*L]
+            L2 = [*L]
+            L3 = [*L]
 
-        start = timeit.default_timer()
-        quicksort(L1)
-        elapsed = timeit.default_timer() - start
-        total1 += elapsed
-        trial1.append(elapsed)
+            start = timeit.default_timer()
+            quicksort(L1)
+            elapsed = timeit.default_timer() - start
+            total1 += elapsed
+            trial1.append(elapsed)
 
-        start = timeit.default_timer()
-        mergesort(L2)
-        elapsed = timeit.default_timer() - start
-        total2 += elapsed
-        trial2.append(elapsed)
+            start = timeit.default_timer()
+            mergesort(L2)
+            elapsed = timeit.default_timer() - start
+            total2 += elapsed
+            trial2.append(elapsed)
 
-        start = timeit.default_timer()
-        heapsort(L3)
-        elapsed = timeit.default_timer() - start
-        total3 += elapsed
-        trial3.append(elapsed)
-    
-    data1.append(sum(trial1) / runs)
-    data2.append(sum(trial2) / runs)
-    data3.append(sum(trial3) / runs)
-
-
-for i in range(n):
-    print(f"Run Size: {lengths[i]}:")
-    print(f"  QuickSort: {data1[i]}")
-    print(f"  MergeSort: {data2[i]}")
-    print(f"  HeapSort: {data3[i]}")
-    print(f"Performance Comparison: ")
-    print(f"  QuickSort vs MergeSort : {round((data2[i] / data1[i]),2)}x")
-    print(f"  QuickSort vs HeapSort : {round((data3[i] / data1[i]),2)}x")
+            start = timeit.default_timer()
+            heapsort(L3)
+            elapsed = timeit.default_timer() - start
+            total3 += elapsed
+            trial3.append(elapsed)
+        
+        data1.append(sum(trial1) / runs)
+        data2.append(sum(trial2) / runs)
+        data3.append(sum(trial3) / runs)
 
 
-plt.plot(lengths, data1, color='red', label='quick_sort')
-plt.plot(lengths, data2, color='blue', label='merge_sort')
-plt.plot(lengths, data3, color='lime', label='heap_sort')
-
-plt.title('Runtime Comparison of Good Sorting Algorithms')
-plt.xlabel('Input Size')
-plt.ylabel('Runtime')
-plt.legend()
-
-plt.show()
+    for i in range(n):
+        print(f"Run Size: {lengths[i]}:")
+        print(f"  QuickSort: {data1[i]}")
+        print(f"  MergeSort: {data2[i]}")
+        print(f"  HeapSort: {data3[i]}")
+        print(f"Performance Comparison: ")
+        print(f"  QuickSort vs MergeSort : {round((data2[i] / data1[i]),2)}x")
+        print(f"  QuickSort vs HeapSort : {round((data3[i] / data1[i]),2)}x")
 
 
-# *************************************
-# Graphing of Experiment 7 and 8
+    plt.plot(lengths, data1, color='red', label='quick_sort')
+    plt.plot(lengths, data2, color='blue', label='merge_sort')
+    plt.plot(lengths, data3, color='lime', label='heap_sort')
 
-def experiment(*callbacks):
-    datas = [ 
+    plt.title('Runtime Comparison of Good Sorting Algorithms')
+    plt.xlabel('Input Size')
+    plt.ylabel('Runtime')
+    plt.legend()
+
+    plt.show()
+
+
+    # *************************************
+    # Graphing of Experiment 7 and 8
+
+
+    def experiment(callbacks, datas):
+        results = {} 
+        for callback in callbacks:
+            datas_ = [[*data] for data in datas]
+            result = [[], []]
+            for i in range(len(datas_)):
+                start = timeit.default_timer()
+                callback(datas_[i])
+                elapsed = timeit.default_timer() - start
+                result[0].append(len(datas_[i]))
+                result[1].append(elapsed)
+            results[callback.__name__] = result
+            
+        return results
+
+    def graph(*callbacks, filePath, title, colors, datas):
+        results = experiment(callbacks, datas=datas)
+        i = 0
+        for result in results:
+            plt.plot(results[result][0], results[result][1], color=colors[i], label=result)
+            i += 1
+        plt.title(title)
+        plt.xlabel('Input Size')
+        plt.ylabel('Runtime')
+        plt.legend()
+        plt.savefig(filePath)
+
+    # mergesort and bottom_up_merge sort comparisons
+
+    expertiment7_test_datas = [ 
         create_random_list(100, 40), # a list of 100 elements in range 0 ... 40
         create_random_list(1000, 1000), # a list of 1000 elements in range 0 ... 1000
         create_random_list(70000, 1000), # a list of 10000 elements in range 0 ... 1000
         create_random_list(200000, 100000), # a list of 100000 elements in range 0 ... 100000
         create_random_list(400000, 100000), # a list of 200000 elements in range 0 ... 100000
     ]
-    results = {} 
-    for callback in callbacks:
-        datas_ = [[*data] for data in datas]
-        result = [[], []]
-        for i in range(len(datas_)):
-            start = timeit.default_timer()
-            callback(datas_[i])
-            elapsed = timeit.default_timer() - start
-            result[0].append(len(datas_[i]))
-            result[1].append(elapsed)
-        results[callback.__name__] = result
-        
-    return results
 
-def graph(*callbacks, filePath, title, colors):
-    results = experiment(mergesort, bottom_up_mergesort)
-    i = 0
-    for result in results:
-        plt.plot(results[result][0], results[result][1], color=colors[i], label=result)
-        i += 1
-    plt.title(title)
-    plt.xlabel('Input Size')
-    plt.ylabel('Runtime')
-    plt.legend()
-    plt.savefig(filePath)
+    graph(mergesort, bottom_up_mergesort, filePath="./Graphs/experiment7.png",
+          title = 'Runtime Comparison of top down and bottom up merge sort', 
+          colors = ("r", "b"), datas= expertiment7_test_datas
+    )
 
-# mergesort and bottom_up_merge sort comparisons
-graph(mergesort, bottom_up_mergesort, filePath="./Graphs/experiment7.png",
-      title = 'Runtime Comparison of top down and bottom up merge sort', 
-      colors = ("r", "b") 
-)
+    expertiment8_test_datas = [ 
+        create_random_list(10, 10), # a list of 10 elements in range 0 ... 10
+        create_random_list(20, 70), # a list of 20 elements in range 0 ... 70
+        create_random_list(50, 100), # a list of 50 elements in range 0 ... 100
+        create_random_list(70, 100), # a list of 70 elements in range 0 ... 100
+        create_random_list(100, 100), # a list of 100 elements in range 0 ... 100
+    ]
+
+    graph(mergesort, quicksort, insertion_sort2, filePath="./Graphs/experiment8.png",
+          title = 'Runtime Comparison of Insertion, Merge, and Quicksort', 
+          colors = ("r", "b", "g"), datas= expertiment8_test_datas
+    )
 
