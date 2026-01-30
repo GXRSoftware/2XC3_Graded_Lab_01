@@ -264,3 +264,48 @@ plt.ylabel('Runtime')
 plt.legend()
 
 plt.show()
+
+
+# *************************************
+# Graphing of Experiment 7 and 8
+
+def experiment(*callbacks):
+    datas = [ 
+        create_random_list(100, 40), # a list of 100 elements in range 0 ... 40
+        create_random_list(1000, 1000), # a list of 1000 elements in range 0 ... 1000
+        create_random_list(70000, 1000), # a list of 10000 elements in range 0 ... 1000
+        create_random_list(200000, 100000), # a list of 100000 elements in range 0 ... 100000
+        create_random_list(400000, 100000), # a list of 200000 elements in range 0 ... 100000
+    ]
+    results = {} 
+    for callback in callbacks:
+        datas_ = [[*data] for data in datas]
+        result = [[], []]
+        for i in range(len(datas_)):
+            start = timeit.default_timer()
+            callback(datas_[i])
+            elapsed = timeit.default_timer() - start
+            result[0].append(len(datas_[i]))
+            result[1].append(elapsed)
+        results[callback.__name__] = result
+        
+    return results
+
+def graph(*callbacks, filePath, title, colors):
+    results = experiment(mergesort, bottom_up_mergesort)
+    i = 0
+    for result in results:
+        plt.plot(results[result][0], results[result][1], color=colors[i], label=result)
+        i += 1
+    plt.title(title)
+    plt.xlabel('Input Size')
+    plt.ylabel('Runtime')
+    plt.legend()
+    plt.savefig(filePath)
+
+# mergesort and bottom_up_merge sort comparisons
+graph(mergesort, bottom_up_mergesort, filePath="experiment7.png",
+      title = 'Runtime Comparison of top down and bottom up merge sort', 
+      colors = ("r", "b") 
+)
+
