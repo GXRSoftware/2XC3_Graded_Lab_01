@@ -422,13 +422,13 @@ RUNS = 10
 LIST_LENGTH = 2**12          # constant list length for this experiment
 MAX_VALUE = 2**30
 
-# choose a swaps range (more resolution at the small end helps)
+# choose a swaps range 
 swap_counts = list(range(0, 33)) + [40, 50, 60, 75, 100, 150, 200, 300, 400, 600, 800, 1000]
 
 times_q, times_m, times_h = [], [], []
 
 for s in swap_counts:
-    # average over RUNS; generate a fresh near-sorted list each run
+    # average over runs
     tq = tm = th = 0.0
 
     for _ in range(RUNS):
@@ -469,7 +469,7 @@ plt.show()
 
 RUNS = 10
 MAX_VALUE = 2**30
-lengths = [2**x for x in range(5, 15)]  # 32 .. 16384
+lengths = [2**x for x in range(5, 15)] 
 
 times_q2, times_dq = [], []
 
