@@ -2,7 +2,7 @@
 Functionality Imported from bad_sorts.py
 """
 import random
-
+import math
 # Create a random list length "length" containing whole numbers between 0 and max_value inclusive
 def create_random_list(length, max_value):
     return [random.randint(0, max_value) for _ in range(length)]
