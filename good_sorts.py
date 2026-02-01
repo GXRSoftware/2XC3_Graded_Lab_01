@@ -152,9 +152,9 @@ class Heap:
             whitespace = whitespace // 2
         return s
 
-# *************************************
-    
-# Experiment 3 
+# *******
+# ** 4 **
+# *******
     
 def create_random_list(length, max_value):
     return [random.randint(0, max_value) for _ in range(length)]
