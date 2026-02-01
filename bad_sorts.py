@@ -125,37 +125,12 @@ import timeit
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+from graph_algo import graph # imported from experiment 1
 
 if __name__ == "__main__":
     ###############################################################
     #                      Experiment 1:                          #
     ###############################################################
-    def experiment(callbacks, datas):
-        results = {} 
-        for callback in callbacks:
-            datas_ = [[*data] for data in datas]
-            result = [[], []]
-            for i in range(len(datas_)):
-                start = timeit.default_timer()
-                callback(datas_[i])
-                elapsed = timeit.default_timer() - start
-                result[0].append(len(datas_[i]))
-                result[1].append(elapsed)
-            results[callback.__name__] = result
-            
-        return results
-
-    def graph(*callbacks, filePath, title, colors, datas):
-        results = experiment(callbacks, datas=datas)
-        i = 0
-        for result in results:
-            plt.plot(results[result][0], results[result][1], color=colors[i], label=result)
-            i += 1
-        plt.title(title)
-        plt.xlabel('Input Size')
-        plt.ylabel('Runtime')
-        plt.legend()
-        plt.savefig(filePath)
     expertiment1_test_datas = [ 
         create_random_list(10, 10), # a list of 10 elements in range 0 ... 10
         create_random_list(100, 70), # a list of 20 elements in range 0 ... 70
