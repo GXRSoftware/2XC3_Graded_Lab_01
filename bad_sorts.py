@@ -61,7 +61,7 @@ def insert2(L, i):
     L[0] = value
 
 
-# ******************* Bubble sort code *******************
+# ******************* Bubble Sort *******************
 
 # Traditional Bubble sort
 def bubble_sort(L):
@@ -71,15 +71,16 @@ def bubble_sort(L):
                 swap(L, j, j+1)
 
 # Optimized Bubble sort
-def bubble_sort2(L):  # LOOK HERE
+def bubble_sort2(L):
     for i in range(len(L)):
-        swaped = False
-        for j in range(len(L) - i - 1):
+        for j in range(len(L) - 1):
             if L[j] > L[j+1]:
-                swap(L, j, j+1)
-                swaped = True
-        if not swaped:
-            break
+                temp = L[j+1]                  #LOOK HERE
+                k = j
+                while k >= 0 and L[k] > temp:  #LOOK HERE
+                    L[k+1] = L[k]
+                    k -= 1
+                L[k+1] = temp                  #LOOK HERE
 # ******************* Selection sort code *******************
 
 # Traditional Selection sort
@@ -100,11 +101,11 @@ def selection_sort2(L):
     l = len(L) - 1
     while i < l:
         min_index, max_index = find_indexes(L, i, l)  #LOOK HERE
-        if (i == max_index):           #LOOK HERE
+        if (i == max_index):                          #LOOK HERE
             swap(L, i, min_index)
         else:
             swap(L, i, min_index)
-            swap(L, l, max_index)      #LOOK HERE
+            swap(L, l, max_index)                     #LOOK HERE
         i += 1
         l -= 1
 
@@ -118,7 +119,6 @@ def find_indexes(L, n, e):
             max_index = i
     return min_index, max_index
 
-
 import matplotlib
 import random
 import timeit
@@ -128,9 +128,9 @@ import math
 from graph_algo import graph # imported from experiment 1
 
 if __name__ == "__main__":
-    ###############################################################
-    #                      Experiment 1:                          #
-    ###############################################################
+    #######
+    #  1  #
+    #######
     expertiment1_test_datas = [ 
         create_random_list(10, 10), # a list of 10 elements in range 0 ... 10
         create_random_list(100, 70), # a list of 20 elements in range 0 ... 70
@@ -147,9 +147,12 @@ if __name__ == "__main__":
     #######
     #  2  #
     #######
-    lengths = [2**x for x in range(13)]
+    #Bub vs Bub2
+    lengths = [2**x for x in range(15)]
     max_value = 2**30
     lists = [create_random_list(_, max_value) for _ in lengths]
+
+    RUNS = 10
 
     n = len(lengths)
     total1, total2, total3 = 0, 0, 0
@@ -160,34 +163,44 @@ if __name__ == "__main__":
     for _ in range(n):
         print(_)
         L = lists[_]
-        L1 = [*L]
-        L2 = [*L]
 
-        start = timeit.default_timer()
-        bubble_sort(L1)
-        elapsed = timeit.default_timer() - start
+        # bubble_sort (averaged)
+        elapsed = 0
+        for __ in range(RUNS):
+            L1 = [*L]
+            start = timeit.default_timer()
+            bubble_sort(L1)
+            elapsed += timeit.default_timer() - start
+        elapsed /= RUNS
         total1 += elapsed
         data1.append(elapsed)
 
-        start = timeit.default_timer()
-        bubble_sort2(L2)
-        elapsed = timeit.default_timer() - start
+        # bubble_sort2 (averaged)
+        elapsed = 0
+        for __ in range(RUNS):
+            L2 = [*L]
+            start = timeit.default_timer()
+            bubble_sort2(L2)
+            elapsed += timeit.default_timer() - start
+        elapsed /= RUNS
         total2 += elapsed
         data2.append(elapsed)
 
     plt.plot(lengths, data1, color='red', label='bubble_sort')
     plt.plot(lengths, data2, color='darkred', label='bubble_sort2')
 
-    plt.title('Runtime Comparison of Sorting Algorithms')
-    plt.xlabel('Input Size')
+    plt.title('Bubble Sort vs Bubble Sort 2')
+    plt.xlabel('List Length')
     plt.ylabel('Runtime')
     plt.legend()
-
     plt.show()
 
-    lengths = [2**x for x in range(13)]
+    #Sel vs Sel2
+    lengths = [2**x for x in range(15)]
     max_value = 2**30
     lists = [create_random_list(_, max_value) for _ in lengths]
+
+    RUNS = 10
 
     n = len(lengths)
     total1, total2, total3 = 0, 0, 0
@@ -198,34 +211,44 @@ if __name__ == "__main__":
     for _ in range(n):
         print(_)
         L = lists[_]
-        L1 = [*L]
-        L2 = [*L]
 
-        start = timeit.default_timer()
-        selection_sort(L1)
-        elapsed = timeit.default_timer() - start
+        # selection_sort (averaged)
+        elapsed = 0
+        for __ in range(RUNS):
+            L1 = [*L]
+            start = timeit.default_timer()
+            selection_sort(L1)
+            elapsed += timeit.default_timer() - start
+        elapsed /= RUNS
         total1 += elapsed
         data1.append(elapsed)
 
-        start = timeit.default_timer()
-        selection_sort2(L2)
-        elapsed = timeit.default_timer() - start
+        # selection_sort2 (averaged)
+        elapsed = 0
+        for __ in range(RUNS):
+            L2 = [*L]
+            start = timeit.default_timer()
+            selection_sort2(L2)
+            elapsed += timeit.default_timer() - start
+        elapsed /= RUNS
         total2 += elapsed
         data2.append(elapsed)
 
     plt.plot(lengths, data1, color='lime', label='selection_sort')
     plt.plot(lengths, data2, color='green', label='selection_sort2')
 
-    plt.title('Runtime Comparison of Sorting Algorithms')
-    plt.xlabel('Input Size')
+    plt.title('Selection Sort vs Selection Sort 2')
+    plt.xlabel('List Length')
     plt.ylabel('Runtime')
     plt.legend()
-
     plt.show()
 
-    lengths = [2**x for x in range(13)]
+    #Bub2 vs Sel2
+    lengths = [2**x for x in range(15)]
     max_value = 2**30
     lists = [create_random_list(_, max_value) for _ in lengths]
+
+    RUNS = 10
 
     n = len(lengths)
     total1, total2, total3 = 0, 0, 0
@@ -236,80 +259,91 @@ if __name__ == "__main__":
     for _ in range(n):
         print(_)
         L = lists[_]
-        L1 = [*L]
-        L2 = [*L]
 
-        start = timeit.default_timer()
-        bubble_sort2(L1)
-        elapsed = timeit.default_timer() - start
+        # bubble_sort2 (averaged)
+        elapsed = 0
+        for __ in range(RUNS):
+            L1 = [*L]
+            start = timeit.default_timer()
+            bubble_sort2(L1)
+            elapsed += timeit.default_timer() - start
+        elapsed /= RUNS
         total1 += elapsed
         data1.append(elapsed)
 
-        start = timeit.default_timer()
-        selection_sort2(L2)
-        elapsed = timeit.default_timer() - start
+        # selection_sort2 (averaged)
+        elapsed = 0
+        for __ in range(RUNS):
+            L2 = [*L]
+            start = timeit.default_timer()
+            selection_sort2(L2)
+            elapsed += timeit.default_timer() - start
+        elapsed /= RUNS
         total2 += elapsed
         data2.append(elapsed)
 
     plt.plot(lengths, data1, color='darkred', label='bubble_sort2')
     plt.plot(lengths, data2, color='green', label='selection_sort2')
 
-    plt.title('Runtime Comparison of Sorting Algorithms')
-    plt.xlabel('Input Size')
+    plt.title('Bubble Sort 2 vs Selection Sort 2')
+    plt.xlabel('List Length')
     plt.ylabel('Runtime')
     plt.legend()
-
     plt.show()
 
     #######
-    #  3  #
+    #  3  #  
     #######
 
-    lengths = [2**x for x in range(13)]
+    length = 5000
     max_value = 2**30
-    lists = [create_near_sorted_list(_, max_value, 0) for _ in lengths]
+    RUNS = 10
 
-    n = len(lengths)
-    total1, total2, total3 = 0, 0, 0
+    # Choose swap counts (range is adjustable)
+    # Starts near-sorted and approaches random-ish.
+    swaps_list = [0, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]
+
     data1, data2, data3 = [], [], []
-    cmp1, cmp2, cmp3 = [], [], []
-    value = random.randint(0, max_value)
 
-    for _ in range(n):
-        print(_)
-        L = lists[_]
-        L1 = [*L]
-        L2 = [*L]
-        L3 = [*L]
+    for s in swaps_list:
+        print("swaps =", s)
 
-        start = timeit.default_timer()
-        bubble_sort(L1)
-        elapsed = timeit.default_timer() - start
-        total1 += elapsed
-        data1.append(elapsed)
+        # Generate one base list for this swap count
+        base = create_near_sorted_list(length, max_value, s)
 
-        start = timeit.default_timer()
-        insertion_sort(L2)
-        elapsed = timeit.default_timer() - start
-        total2 += elapsed
-        data2.append(elapsed)
+        # bubble_sort (averaged)
+        elapsed = 0
+        for _ in range(RUNS):
+            L1 = [*base]
+            start = timeit.default_timer()
+            bubble_sort(L1)
+            elapsed += timeit.default_timer() - start
+        data1.append(elapsed / RUNS)
 
-        start = timeit.default_timer()
-        selection_sort(L3)
-        elapsed = timeit.default_timer() - start
-        total3 += elapsed
-        data3.append(elapsed)
+        # insertion_sort (averaged)
+        elapsed = 0
+        for _ in range(RUNS):
+            L2 = [*base]
+            start = timeit.default_timer()
+            insertion_sort(L2)
+            elapsed += timeit.default_timer() - start
+        data2.append(elapsed / RUNS)
 
-    print("Binary search avg runtime (ms): ", f"{total1/n:e}")
-    print("Linear search avg runtime (ms): ", f"{total2/n:e}")
+        # selection_sort (averaged)
+        elapsed = 0
+        for _ in range(RUNS):
+            L3 = [*base]
+            start = timeit.default_timer()
+            selection_sort(L3)
+            elapsed += timeit.default_timer() - start
+        data3.append(elapsed / RUNS)
 
-    plt.plot(lengths, data1, color='red', label='near_sorted_bubble_sort')
-    plt.plot(lengths, data2, color='blue', label='near_sorted_insertion_sort')
-    plt.plot(lengths, data3, color='lime', label='near_sorted_selection_sort')
+    plt.plot(swaps_list, data1, color='red', label='bubble_sort')
+    plt.plot(swaps_list, data2, color='blue', label='insertion_sort')
+    plt.plot(swaps_list, data3, color='lime', label='selection_sort')
 
-    plt.title('Runtime Comparison of Sorting Algorithms')
-    plt.xlabel('Input Size')
-    plt.ylabel('Runtime')
+    plt.title('Runtime vs Number of Random Swaps (length = 5000)')
+    plt.xlabel('Number of Swaps')
+    plt.ylabel('Average Runtime')
     plt.legend()
-
     plt.show()
