@@ -120,9 +120,9 @@ def find_indexes(L, n, e):
     return min_index, max_index
 
 RUNS = 10
-# ###############################################################
-# #                      Experiment 1:                          #
-# ###############################################################
+#######
+#  1  #
+#######
 import matplotlib
 import random
 import timeit

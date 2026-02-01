@@ -412,9 +412,9 @@ plt.legend()
 
 plt.show()
 
-# ===============================================================
-# Experiment 5: swaps vs time (quicksort vs mergesort vs heapsort)
-# ===============================================================
+#######
+#  5  #  
+#######
 import sys
 sys.setrecursionlimit(30000)
 
@@ -463,9 +463,9 @@ plt.legend()
 plt.show()
 
 
-# ===============================================================
-# Experiment 6: list length vs time (quicksort vs dual_quicksort)
-# ===============================================================
+#######
+#  6  #  
+#######
 
 RUNS = 10
 MAX_VALUE = 2**30
@@ -500,16 +500,16 @@ plt.ylabel("Time (seconds)")
 plt.legend()
 plt.show()
 
-# ===============================================================
-# Additional
-# ===============================================================
+#####################
+#  6: n-ary Pivots  #  
+#####################
 
 import timeit
 import matplotlib.pyplot as plt
 
 RUNS = 10
 MAX_VALUE = 2**30
-lengths = [2**x for x in range(5, 15)]  # 32 .. 16384
+lengths = [2**x for x in range(5, 15)] 
 ns = [1, 2, 3, 4, 5]
 
 results = {n: [] for n in ns}
