@@ -1,9 +1,7 @@
 """
-This file corresponds to the first graded lab of 2XC3.
-Feel free to modify and/or add functions to this file.
+Functionality Imported from bad_sorts.py
 """
 import random
-
 
 # Create a random list length "length" containing whole numbers between 0 and max_value inclusive
 def create_random_list(length, max_value):
@@ -75,12 +73,12 @@ def bubble_sort2(L):
     for i in range(len(L)):
         for j in range(len(L) - 1):
             if L[j] > L[j+1]:
-                temp = L[j+1]
+                temp = L[j+1]                  #LOOK HERE
                 k = j
-                while k >= 0 and L[k] > temp:
+                while k >= 0 and L[k] > temp:  #LOOK HERE
                     L[k+1] = L[k]
                     k -= 1
-                L[k+1] = temp
+                L[k+1] = temp                  #LOOK HERE 
 # ******************* Selection sort code *******************
 
 # Traditional Selection sort
@@ -101,21 +99,21 @@ def selection_sort2(L):
     l = len(L) - 1
     while i < l:
         min_index, max_index = find_indexes(L, i, l)  #LOOK HERE
-        if (i == max_index):           #LOOK HERE
+        if (i == max_index):                          #LOOK HERE
             swap(L, i, min_index)
         else:
             swap(L, i, min_index)
-            swap(L, l, max_index)      #LOOK HERE
+            swap(L, l, max_index)                     #LOOK HERE
         i += 1
         l -= 1
 
 def find_indexes(L, n, e):
     min_index = n
-    max_index = n                  #LOOK HERE
+    max_index = n                                     #LOOK HERE
     for i in range(n+1, e + 1):
         if L[i] < L[min_index]:
             min_index = i
-        if L[i] > L[max_index]:    #LOOK HERE
+        if L[i] > L[max_index]:                       #LOOK HERE
             max_index = i
     return min_index, max_index
 
@@ -163,37 +161,21 @@ def dual_quicksort(L):
 def dual_quicksort_copy(L):
     if len(L) < 2:
         return L
-    pivot1 = L[0]
-    pivot2 = L[1]
-    if pivot1 > pivot2:
+    pivot1 = L[0]                                 #LOOK HERE
+    pivot2 = L[1]                                 #LOOK HERE
+    if pivot1 > pivot2:                           #LOOK HERE
         pivot1, pivot2 = pivot2, pivot1
-    left, mid, right = [], [], []
+    left, mid, right = [], [], []                 #LOOK HERE
     for num in L[2:]:
-        if num < pivot1:
+        if num < pivot1:                          #LOOK HERE
             left.append(num)
-        elif num < pivot2:
+        elif num < pivot2:                        #LOOK HERE
             mid.append(num)
-        else:
+        else:                                     #LOOK HERE
             right.append(num)
     return dual_quicksort_copy(left) + [pivot1] + dual_quicksort_copy(mid) + [pivot2] + dual_quicksort_copy(right)
 
 # *************************************
-
-def insertion_sort(L):
-    for i in range(1, len(L)):
-        insert(L, i)
-
-
-def insert(L, i):
-    value = L[i]
-    while i > 0:
-        if L[i - 1] > value:
-            L[i] = L[i - 1]
-            i -= 1
-        else:
-            L[i] = value
-            return
-    L[0] = value
 
 # ************ n Quick Sort (requires insertion sort for pivots, due to short list) ************
 def n_quicksort(L, n):
@@ -209,25 +191,25 @@ def n_quicksort_copy(L, n):
     if (n > l):
         n = l
 
-    pivots = [L[i] for i in range(0, n)]
+    pivots = [L[i] for i in range(0, n)]            #LOOK HERE
     insertion_sort(pivots)
 
-    divs = [[] for i in range(n + 1)]
+    divs = [[] for i in range(n + 1)]               #LOOK HERE
 
     for num in L[n:]:
         i = 0
-        added = False
-        while i < n:
-            if num < pivots[i]:
+        added = False                               #LOOK HERE
+        while i < n:                                #LOOK HERE
+            if num < pivots[i]:                     #LOOK HERE
                 added = True
                 divs[i].append(num)
                 i = n
             i += 1
-        if not added:
+        if not added:                               #LOOK HERE
             divs[n].append(num)
-    
-    r = n_quicksort_copy(divs[0], n)
-    for i in range(n):
+   
+    r = n_quicksort_copy(divs[0], n)                #LOOK HERE
+    for i in range(n):                              #LOOK HERE
         r.append(pivots[i])
         r.extend(n_quicksort_copy(divs[i + 1], n))
 
